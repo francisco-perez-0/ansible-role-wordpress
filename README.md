@@ -1,4 +1,4 @@
-WordPress Ansible Role
+## WordPress Ansible Role
 ======================
 
 This Ansible role installs and configures WordPress with Apache and PHP. It supports both Debian/Ubuntu and RedHat/Rocky Linux families. The role is designed to automate the deployment of a ready-to-use WordPress site, including web server setup, PHP installation, and directory permissions. It can be used in conjunction with the geerlingguy.mysql role for database provisioning.
