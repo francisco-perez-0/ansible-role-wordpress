@@ -121,7 +121,7 @@
   when: wp_config_result.checksum is not defined
 
 - name: Restart apache in debian
-  ansible.builtin.systemd:
-    name: "{{ wordpress_apache_service_name }}"
-    state: restarted
+  ansible.builtin.debug:
+    msg: "Reiniciando Apache en Debian"
+  notify: Reiniciar Apache
   when: ansible_os_family == "Debian"
