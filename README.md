@@ -43,14 +43,11 @@ Example Playbook
     wordpress_db_user: wp_user
     wordpress_db_password: wp_pass
     wordpress_db_host: localhost
-    wordpress_dir: /var/www/wordpress
+    wordpress_dir: /var/www/mysite.local
+    wordpress_apache_server_name: mysite.local
   roles:
-    - geerlingguy.mysql
-    - role: wordpress
-      vars:
-        wordpress_apache_server_name: mysite.local
-        wordpress_apache_http_port: 80
-        wordpress_php_version: "7.4"
+    - role: geerlingguy.mysql
+    - role: francisco-perez-0.wordpress
 ```
 
 License
