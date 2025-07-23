@@ -1,38 +1,62 @@
-Role Name
-=========
+WordPress Ansible Role
+======================
 
-A brief description of the role goes here.
+This Ansible role installs and configures WordPress with Apache and PHP. It supports both Debian/Ubuntu and RedHat/Rocky Linux families. The role is designed to automate the deployment of a ready-to-use WordPress site, including web server setup, PHP installation, and directory permissions. It can be used in conjunction with the geerlingguy.mysql role for database provisioning.
 
 Requirements
 ------------
-
-Any pre-requisites that may not be covered by Ansible itself or the role should be mentioned here. For instance, if the role uses the EC2 module, it may be a good idea to mention in this section that the boto package is required.
+- Ansible 2.9+
+- Supported OS: Ubuntu, Debian, Rocky Linux, RedHat
+- For database provisioning: [geerlingguy.mysql](https://galaxy.ansible.com/geerlingguy/mysql)
+- (Optional) Docker and Molecule for testing
 
 Role Variables
 --------------
+The following variables can be customized:
 
-A description of the settable variables for this role should go here, including any variables that are in defaults/main.yml, vars/main.yml, and any variables that can/should be set via parameters to the role. Any variables that are read from other roles and/or the global scope (ie. hostvars, group vars, etc.) should be mentioned here as well.
+- `wordpress_php_version`: PHP version to install (default: "7.4")
+- `wordpress_apache_http_port`: Apache HTTP port (default: 80)
+- `wordpress_apache_server_name`: ServerName for Apache (default: "localhost")
+- `wordpress_apache_log_dir`: Apache log directory (auto-detected by OS family)
+- `wordpress_apache_service_name`: Apache service name (auto-detected by OS family)
+- `wordpress_dir`: Directory where WordPress will be installed (required)
+- `wordpress_db_name`: WordPress database name (required for wp-config.php)
+- `wordpress_db_user`: WordPress database user (required for wp-config.php)
+- `wordpress_db_password`: WordPress database password (required for wp-config.php)
+- `wordpress_db_host`: WordPress database host (required for wp-config.php)
+- `skip_wp_config`: If true, skips generating wp-config.php (default: false)
+
+See `defaults/main.yml` and `vars/Debian.yml` or `vars/RedHat.yml` for more details.
 
 Dependencies
 ------------
-
-A list of other roles hosted on Galaxy should go here, plus any details in regards to parameters that may need to be set for other roles, or variables that are used from other roles.
+- [geerlingguy.mysql](https://galaxy.ansible.com/geerlingguy/mysql) (for MySQL/MariaDB setup)
 
 Example Playbook
 ----------------
-
-Including an example of how to use your role (for instance, with variables passed in as parameters) is always nice for users too:
-
-    - hosts: servers
-      roles:
-         - { role: username.rolename, x: 42 }
+```yaml
+- name: Install WordPress with MySQL
+  hosts: all
+  become: true
+  vars:
+    wordpress_db_name: wp_db
+    wordpress_db_user: wp_user
+    wordpress_db_password: wp_pass
+    wordpress_db_host: localhost
+    wordpress_dir: /var/www/wordpress
+  roles:
+    - geerlingguy.mysql
+    - role: wordpress
+      vars:
+        wordpress_apache_server_name: mysite.local
+        wordpress_apache_http_port: 80
+        wordpress_php_version: "7.4"
+```
 
 License
 -------
-
-BSD
+MIT
 
 Author Information
 ------------------
-
-An optional section for the role authors to include contact information, or a website (HTML is not allowed).
+Francisco Perez <francisco.perez@mikroways.com>
