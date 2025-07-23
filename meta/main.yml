@@ -1,0 +1,28 @@
+---
+galaxy_info:
+  role_name: wordpress
+  namespace: mikroways
+  author: FranciscoPerez
+  description: "Instala y configura WordPress con Apache y PHP, compatible con Ubuntu/Debian y Rocky/RedHat."
+  company: "Mikroways"
+  license: MIT
+  min_ansible_version: '2.9'
+  platforms:
+    - name: Ubuntu
+      versions:
+        - all
+    - name: Debian
+      versions:
+        - all
+    - name: EL
+      versions:
+        - all
+  galaxy_tags:
+    - wordpress
+    - apache
+    - php
+    - web
+    - cms
+    - molecule
+
+allow_duplicates: false

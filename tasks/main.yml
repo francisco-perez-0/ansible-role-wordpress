@@ -1,0 +1,121 @@
+- name: Incluir variables segun sistema operativo
+  ansible.builtin.include_vars: "{{ ansible_os_family }}.yml"
+
+- name: Instalar Apache Ubuntu
+  ansible.builtin.apt:
+    name: apache2
+    update_cache: true
+    state: present
+  when: ansible_os_family == "Debian"
+
+- name: Instalar Apache RedHat
+  ansible.builtin.dnf:
+    name: httpd
+    state: present
+  when: ansible_os_family == "RedHat"
+
+- name: Copiar archivo de configuracion
+  ansible.builtin.template:
+    src: apache-wp.conf.j2
+    dest: /etc/apache2/sites-available/001-wp.conf
+    mode: '0744'
+  when: ansible_os_family == "Debian"
+  notify: Reiniciar Apache
+
+- name: Copiar archivo de configuracion
+  ansible.builtin.template:
+    src: apache-wp.conf.j2
+    dest: /etc/httpd/conf.d/001-wp.conf
+    mode: '0744'
+  when: ansible_os_family == "RedHat"
+
+- name: Instalar PHP
+  ansible.builtin.package:
+    name: "{{ wordpress_php_packages }}"
+    state: present
+
+- name: Deshabilitar sitio default Apache
+  ansible.builtin.command:
+    a2dissite 000-default.conf
+  changed_when: false
+  notify: Reiniciar Apache
+  when: ansible_os_family == "Debian"
+
+- name: Habilitar configuracion sitio PHP
+  ansible.builtin.command:
+    a2ensite 001-wp.conf
+  changed_when: false
+  notify: Reiniciar Apache
+  when: ansible_os_family == "Debian"
+
+- name: Crear directorio de Wordpress
+  ansible.builtin.file:
+    path: "{{ wordpress_dir }}"
+    state: directory
+    owner: "{{ (ansible_os_family == 'RedHat') | ternary('apache', 'www-data') }}"
+    group: "{{ (ansible_os_family == 'RedHat') | ternary('apache', 'www-data') }}"
+    mode: '0755'
+
+- name: Descargar Wordpress
+  ansible.builtin.unarchive:
+    src: https://wordpress.org/wordpress-6.1.tar.gz
+    dest: "{{ wordpress_dir }}"
+    remote_src: true
+    creates: "{{ wordpress_dir }}/wordpress"
+  retries: 3
+  delay: 10
+  register: result
+  until: result is succeeded
+
+- name: Otorgar permisos para directorios a 755
+  ansible.builtin.find:
+    paths: "{{ wordpress_dir }}/wordpress"
+    file_type: directory
+  register: wordpress_dirs
+
+- name: Aplicar permisos 755 a directorios
+  ansible.builtin.file:
+    path: "{{ item.path }}"
+    state: touch
+    mode: '0755'
+    owner: "{{ (ansible_os_family == 'RedHat') | ternary('apache', 'www-data') }}"
+    group: "{{ (ansible_os_family == 'RedHat') | ternary('apache', 'www-data') }}"
+    modification_time: preserve
+    access_time: preserve
+  loop: "{{ wordpress_dirs.files }}"
+
+- name: Otorgar permisos a archivos 644
+  ansible.builtin.find:
+    paths: "{{ wordpress_dir }}/wordpress"
+    file_type: file
+  register: wordpress_files
+
+- name: Aplicar permisos 644 a archivos
+  ansible.builtin.file:
+    path: "{{ item.path }}"
+    mode: '0644'
+    owner: "{{ (ansible_os_family == 'RedHat') | ternary('apache', 'www-data') }}"
+    group: "{{ (ansible_os_family == 'RedHat') | ternary('apache', 'www-data') }}"
+  loop: "{{ wordpress_files.files }}"
+  changed_when: false
+
+# - name: Setear permisos para directorios
+#  shell: "/usr/bin/find {{ wordpress_dir }}/wordpress/ -type d -exec chmod 750 {} \\;"
+
+
+# - name: Setear permisos para archivos
+#  shell: "/usr/bin/find {{ wordpress_dir }}/wordpress/ -type f -exec chmod 640 {} \\;"
+
+- name: Set up wp-config
+  ansible.builtin.template:
+    src: wp-config.php.j2
+    dest: "{{ wordpress_dir }}/wordpress/wp-config.php"
+    mode: '0744'
+  when: not skip_wp_config | default(false)
+  register: wp_config_result
+  changed_when: false
+
+- name: Marcar que no hubo cambio en wp-config
+  ansible.builtin.set_fact:
+    wp_config_changed: false
+  when: wp_config_result.checksum is not defined

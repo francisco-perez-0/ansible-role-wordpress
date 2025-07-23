@@ -1,0 +1,17 @@
+wordpress_php_packages:
+  - "php{{ wordpress_php_version }}"
+  - "php{{ wordpress_php_version }}-curl"
+  - "php{{ wordpress_php_version }}-dom"
+  - "php{{ wordpress_php_version }}-exif"
+  - "php{{ wordpress_php_version }}-fileinfo"
+  - "php{{ wordpress_php_version }}-mysql"
+  - "php{{ wordpress_php_version }}-igbinary"
+  - "php{{ wordpress_php_version }}-imagick"
+  - "php{{ wordpress_php_version }}-intl"
+  - "php{{ wordpress_php_version }}-mbstring"
+  - "php{{ wordpress_php_version }}-xml"
+  - "php{{ wordpress_php_version }}-zip"
+
+wordpress_apache_packages:
+  - apache2
+  - "libapache2-mod-php{{ wordpress_php_version }}"

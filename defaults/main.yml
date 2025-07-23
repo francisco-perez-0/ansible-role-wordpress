@@ -1,0 +1,6 @@
+wordpress_php_version: "7.4"
+
+wordpress_apache_http_port: 80
+wordpress_apache_server_name: localhost
+wordpress_apache_log_dir: "{{ '/var/log/apache2' if ansible_os_family == 'Debian' else '/var/log/httpd' }}"
+wordpress_apache_service_name: "{{ 'apache2' if ansible_os_family == 'Debian' else 'httpd' }}"

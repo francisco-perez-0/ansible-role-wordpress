@@ -1,0 +1,20 @@
+wordpress_php_packages:
+  - php
+  - php-curl
+  - php-dom
+  - php-exif
+  - php-fileinfo
+  - php-hash
+  # - php-igbinary
+  # - php-imagick
+  - php-intl
+  - php-mbstring
+  - php-openssl
+  - php-pcre
+  - php-xml
+  - php-zip
+  - php-mysqlnd
+
+wordpress_apache_packages:
+  - httpd
+  - php

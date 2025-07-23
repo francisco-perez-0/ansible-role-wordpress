@@ -1,0 +1,7 @@
+# SPDX-License-Identifier: MIT-0
+---
+- name: Testear rol wordpress
+  hosts: all
+  remote_user: root
+  roles:
+    - wordpress

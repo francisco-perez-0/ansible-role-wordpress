@@ -1,0 +1,16 @@
+---
+- name: Instalar Wordpress con MySQL
+  hosts: all
+  gather_facts: true
+  vars:
+    wordpress_db_name: wp_db
+    wordpress_db_host: localhost
+    wordpress_db_user: wp-user
+    wordpress_db_password: wp-pass
+    skip_wp_config: true
+  roles:
+    - role: ../../..
+      vars:
+        wordpress_apache_server_name: localhost
+        wordpress_dir: "/var/www/{{ wordpress_apache_server_name }}"
+        wordpress_apache_dir: "/var/www/{{ wordpress_apache_server_name }}/wordpress"

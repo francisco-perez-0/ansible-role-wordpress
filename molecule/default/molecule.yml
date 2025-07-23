@@ -1,0 +1,24 @@
+driver:
+  name: docker
+
+platforms:
+  - name: ubuntu
+    image: ubuntu:20.04
+    privileged: true
+    ports:
+      - "8888:80"
+
+  - name: rockylinux
+    image: geerlingguy/docker-rockylinux9-ansible
+    ports:
+      - "8889:80"
+
+  # - name: debian
+  #   image: debian:11
+  #   ports:
+  #     - "8890:80"
+
+provisioner:
+  name: ansible
+  options:
+    become: false

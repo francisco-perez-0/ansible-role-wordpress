@@ -1,0 +1,19 @@
+[tool.poetry]
+name = "1- ansible"
+version = "0.1.0"
+description = ""
+authors = ["Francisco Perez <francisco.perez@alu.ing.unlp.edu.ar>"]
+readme = "README.md"
+
+[tool.poetry.dependencies]
+python = "^3.12"
+ansible = "~11.0.0"
+molecule = "25.1.0"
+molecule-plugins = {version = "23.7.0", extras = ["vagrant"]}
+docker = "^7.1.0"
+ansible-lint = "^25.6.1"
+
+
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"
