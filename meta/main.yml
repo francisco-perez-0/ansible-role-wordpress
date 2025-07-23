@@ -1,7 +1,7 @@
 ---
 galaxy_info:
   role_name: wordpress
-  namespace: franciscoperez
+  namespace: francisco-perez-0
   author: FranciscoPerez
   description: "Instala y configura WordPress con Apache y PHP, compatible con Ubuntu/Debian y Rocky/RedHat."
   company: ""
