@@ -24,7 +24,7 @@ jobs:
           pip install ansible-lint molecule molecule-plugins[docker]
 
       - name: Run Ansible Lint
-        run: ansible-lint roles/wordpress
+        run: ansible-lint .
   test:
     name: Test role with Molecule
     runs-on: ubuntu-latest
