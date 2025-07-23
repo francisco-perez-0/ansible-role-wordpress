@@ -59,4 +59,4 @@ MIT
 
 Author Information
 ------------------
-Francisco Perez <francisco.perez@mikroways.com>
+Francisco Pérez <francisco.perez@mikroways.com>
