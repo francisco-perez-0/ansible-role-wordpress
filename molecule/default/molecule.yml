@@ -13,10 +13,10 @@ platforms:
     ports:
       - "8889:80"
 
-  # - name: debian
-  #   image: debian:11
-  #   ports:
-  #     - "8890:80"
+  - name: debian
+    image: debian:11
+    ports:
+      - "8890:80"
 
 provisioner:
   name: ansible
